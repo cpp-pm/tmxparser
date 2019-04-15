@@ -33,10 +33,12 @@ option(BUILD_DOCS  "Build documentation. (default: OFF)" OFF)
 #Dependencies Settings
 include(${CMAKE_SOURCE_DIR}/cmake/deps.cmake)
 
-find_package(tinyxml2 REQUIRED)
+hunter_add_package(tinyxml2)
+find_package(tinyxml2 CONFIG REQUIRED)
 
 if(NOT USE_MINIZ)
-  find_package(ZLIB) #<-- build it as external project?
+  hunter_add_package(ZLIB)
+  find_package(ZLIB CONFIG) #<-- build it as external project?
 endif()
 
 add_library(tmxparser "")
@@ -125,7 +127,7 @@ target_link_libraries(tmxparser
 
 if(NOT USE_MINIZ)
   target_link_libraries(tmxparser
-    PRIVATE ZLIB::ZLIB)
+    PRIVATE ZLIB::zlib)
 endif()
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
