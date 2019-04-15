@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.2)
 
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.23.154.tar.gz"
+    SHA1 "d720f3775d4b896dab91f8249de04956e31804dd"
+)
+
 project(tmxparser)
 
 include(GNUInstallDirs)
@@ -27,10 +33,12 @@ option(BUILD_DOCS  "Build documentation. (default: OFF)" OFF)
 #Dependencies Settings
 include(${CMAKE_SOURCE_DIR}/cmake/deps.cmake)
 
-find_package(tinyxml2 REQUIRED)
+hunter_add_package(tinyxml2)
+find_package(tinyxml2 CONFIG REQUIRED)
 
 if(NOT USE_MINIZ)
-  find_package(ZLIB) #<-- build it as external project?
+  hunter_add_package(ZLIB)
+  find_package(ZLIB CONFIG) #<-- build it as external project?
 endif()
 
 add_library(tmxparser "")
@@ -119,21 +127,21 @@ target_link_libraries(tmxparser
 
 if(NOT USE_MINIZ)
   target_link_libraries(tmxparser
-    PRIVATE ZLIB::ZLIB)
+    PRIVATE ZLIB::zlib)
 endif()
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tmxparser
         FILES_MATCHING PATTERN Tmx.h)
 
 install(DIRECTORY include/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tmxparser)
 
 install(TARGETS tmxparser EXPORT tmxparserTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tmxparser)
 
 install(EXPORT tmxparserTargets
   FILE tmxparserTargets.cmake
