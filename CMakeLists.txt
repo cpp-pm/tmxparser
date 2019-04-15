@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
+include("cmake/HunterGate.cmake")
+
 project(tmxparser)
 
 include(GNUInstallDirs)
