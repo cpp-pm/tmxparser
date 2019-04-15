@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 
 include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.23.154.tar.gz"
+    SHA1 "d720f3775d4b896dab91f8249de04956e31804dd"
+)
 
 project(tmxparser)
 
